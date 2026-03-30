@@ -1,7 +1,8 @@
 import { Sequelize } from "sequelize";
-const sequelize = new Sequelize('MuebleSys_BD', 'sa', '123', {
+const sequelize = new Sequelize('MuebleSysDB', 'sa', '1234', {
     host: 'localhost',
     dialect: 'mssql',
+    port: 1433,
     logging: console.log, // Habilita el logging de consultas SQL
     dialectOptions: {
         options: {

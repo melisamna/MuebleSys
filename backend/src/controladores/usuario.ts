@@ -29,17 +29,14 @@ try {
     // extraemos nombre, correo y foto del usuario que google nos confirma que es real
     const { email, name, picture } = payload;
 
+    //buscamos al usuario en sql por su correo
     let user = await usuario.findOne({ where: { username: email } });
 
     // si no existe en la base de datos, lo creamos
     if (!user) {
         //si es nuevo, guardamos todo
-        user = await usuario.create({
-            username: email,
-            // la contraseña queda vacia porque se autentica via google
-            contrasena: '',
-            nombre_usuario: name,
-            foto: picture
+        return res.status(401).json({
+            msg: `Acceso Denegado. El correo ${email} no está autorizado en MuebleSys.`
         });
     }
 

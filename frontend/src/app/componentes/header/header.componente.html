@@ -1,5 +1,7 @@
 <div >
   <div *ngIf="datos">
+    <img [src]="datos.picture || datos.foto" alt="Perfil"
+    (error)="onImgError($event)">
     <span>Bienvenido, 
       <strong>
         {{ datos.name || datos.nombre || datos.displayName || 'Usuario' }}

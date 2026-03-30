@@ -6,6 +6,8 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { SocialLoginModule, SocialAuthServiceConfig, GoogleLoginProvider, SocialAuthService, SOCIAL_AUTH_CONFIG } from '@abacritt/angularx-social-login';
 //importamos el interceptor para añadir el token a las peticiones
 import { authInterceptor } from './interceptores/auth.interceptor';
+import { provideToastr } from 'ngx-toastr';
+import { provideAnimations } from '@angular/platform-browser/animations';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -15,6 +17,12 @@ export const appConfig: ApplicationConfig = {
       withInterceptors([authInterceptor])
     ),
     importProvidersFrom(SocialLoginModule),
+    provideAnimations(),
+    provideToastr({
+      timeOut: 3000,
+      positionClass: 'toast-top-center',
+      preventDuplicates: true,
+    }),
 
     {
       //configuracion del servicios de autenticacion social
@@ -29,7 +37,11 @@ export const appConfig: ApplicationConfig = {
             provider: new GoogleLoginProvider(
               //id obtenido desde google cloud console al configurar el inicio de sesión con google
               '88698713707-j5051t95pevu9gvbasrcnagv1d4li5ve.apps.googleusercontent.com'
-            )
+            ,{
+              oneTapEnabled:false,
+              plugin_name: 'mueblesys',
+              use_fedcm: true
+            })
           }
         ],
         onError: (err) => {

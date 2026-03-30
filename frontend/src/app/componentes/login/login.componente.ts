@@ -3,6 +3,7 @@ import { Router, RouterModule } from '@angular/router';
 import { GoogleSigninButtonModule, SocialAuthService, SocialLoginModule} from '@abacritt/angularx-social-login';
 import { UsuarioService } from '../../servicios/usuario.service';
 import { CommonModule } from '@angular/common';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +18,8 @@ export class LoginComponente implements OnInit {
     constructor(
       private authService: SocialAuthService,
       private _usuarioService: UsuarioService,
-      private router: Router
+      private router: Router,
+      private toastr: ToastrService
     ) {}
 
   ngOnInit() { 
@@ -31,16 +33,37 @@ export class LoginComponente implements OnInit {
           next: (res) => {
             // Guardamos el token de MuebleSys en el localStorage para usarlo en futuras peticiones al backend
             localStorage.setItem('token', res.token);
+
+            //creamos un objeto con los nombres que usamos en mueblesys
+            const usuarioParaMuebleSys ={
+              ...userGoogle,
+              nombre_usuario: userGoogle.name,
+              foto: userGoogle.photoUrl
+            };
             //usamos el metodo del servicio
-            this._usuarioService.establecerUsuario(userGoogle);
+            this._usuarioService.establecerUsuario(usuarioParaMuebleSys);
 
             // Redirigimos al usuario a la página principal después de iniciar sesión
-            console.log('Login exitoso, redirigiendo...', userGoogle);
+            console.log('Login exitoso, redirigiendo...', usuarioParaMuebleSys.foto);
             //redirimos a home
             this.router.navigate(['/home']);
           },
           error: (err) => {
-            console.error('Error al iniciar sesión con Google:', err)
+            console.error('Error al iniciar sesión con Google:', err);
+
+            //si el backend mando error 401 se muestra el error
+            const mensajeError = err.error?.msg || 'Error al validar el correo';
+
+            this.toastr.error(mensajeError, 'MuebleSys',{
+              //son 5 segundos para que alcance a leer que no esta autorizado
+              timeOut: 5000,
+              progressBar: true,
+              positionClass: 'toast-top-center'
+            });
+            //limpia el estado de google para que no intente entrar automaticamente la proxima vez
+            this.authService.signOut().catch(e => console.log('Ya estaba fuera'));
+
+            localStorage.removeItem('token');
           }
     });
   } else{
@@ -48,4 +71,5 @@ export class LoginComponente implements OnInit {
   }
     });
   }
+ 
 }
