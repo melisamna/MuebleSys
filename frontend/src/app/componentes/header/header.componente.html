@@ -1,0 +1,11 @@
+<div >
+  <div *ngIf="datos">
+    <span>Bienvenido, 
+      <strong>
+        {{ datos.name || datos.nombre || datos.displayName || 'Usuario' }}
+      </strong>
+    </span>
+  </div>
+  
+  <button (click)="onLogout()">Cerrar Sesión</button>
+</div>
