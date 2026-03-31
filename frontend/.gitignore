@@ -42,3 +42,10 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# Ignorar configuraciones del Backend
+backend/.env
+
+# Ignorar configuraciones del Frontend (Angular)
+frontend/src/environments/environment.ts
+frontend/src/environments/environment.prod.ts

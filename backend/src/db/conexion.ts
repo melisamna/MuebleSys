@@ -1,7 +1,22 @@
 import { Sequelize } from "sequelize";
+import dotenv from 'dotenv';
+ dotenv.config();
 
-const sequelize = new Sequelize('MuebleSysDB', 'sa', '1234',{
-    host: 'localhost',
+ const dbName = process.env.DB_DATABASE;
+ const dbUser = process.env.DB_USER;
+ const dbPass = process.env.DB_PASSWORD;
+ const dbHost = process.env.DB_HOST;
+
+ if (!dbName || !dbUser || !dbPass || !dbHost){
+    throw new Error("Error faltan variables");
+ }
+
+const sequelize = new Sequelize(
+    dbName,
+    dbUser, 
+    dbPass,
+    {
+    host: dbHost,
     dialect: 'mssql',
     port: 1433,
     logging: console.log, // Habilita el logging de consultas SQL

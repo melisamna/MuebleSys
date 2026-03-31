@@ -1,1 +1,1 @@
-{"version":3,"file":"conexion.d.ts","sourceRoot":"","sources":["../../src/db/conexion.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,SAAS,EAAE,MAAM,WAAW,CAAC;AAEtC,QAAA,MAAM,SAAS,WAWb,CAAC;AAEH,eAAe,SAAS,CAAC"}
+{"version":3,"file":"conexion.d.ts","sourceRoot":"","sources":["../../src/db/conexion.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,SAAS,EAAE,MAAM,WAAW,CAAC;AAatC,QAAA,MAAM,SAAS,WAeb,CAAC;AAEH,eAAe,SAAS,CAAC"}

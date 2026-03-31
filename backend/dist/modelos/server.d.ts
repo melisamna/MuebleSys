@@ -3,8 +3,8 @@ export declare class Server {
     private port;
     constructor();
     listen(): void;
-    routes(): void;
     middlewares(): void;
+    routes(): void;
     dbConexion(): Promise<void>;
 }
 export default Server;
