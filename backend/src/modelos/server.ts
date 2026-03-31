@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import rutasUsuario from "../rutas/usuario.js";
+import rutasMuebles from "../rutas/mueble.js"
 import db from "../db/conexion.js";
 
 export class Server{
@@ -23,12 +24,9 @@ export class Server{
 
     listen(){
         this.app.listen(this.port, () => {
-            console.log(`Servidor corriendo en puerto ${this.port}`);
+        console.log(` Servidor corriendo en: http://localhost:${this.port}`);
+        
         });
-    }
-
-    routes(){
-        this.app.use("/api/usuarios", rutasUsuario)
     }
 
     middlewares(){
@@ -36,7 +34,22 @@ export class Server{
         this.app.use(express.json());
 
         // cors: permite que angular (puerto 4200) pueda hacer peticiones al backend (puerto 3000)
-        this.app.use(cors());
+        this.app.use(cors({
+            origin: 'http://localhost:4200',
+            credentials: true
+        }));
+
+        this.app.use((req, res, next) => {
+        res.setHeader("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
+        res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
+        next();
+        });
+    }
+
+    routes(){
+        this.app.get("/ping",(req, res)=> res.send("el servidor esta vivo"));
+        this.app.use("/api/usuarios", rutasUsuario);
+        this.app.use("/api/muebles", rutasMuebles);
     }
 
     async dbConexion(){
@@ -50,6 +63,8 @@ export class Server{
             console.log("Error al conectar a la base de datos", error);
         }
     }
+
+    
 }
 
 export default Server;
