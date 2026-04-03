@@ -2,12 +2,13 @@ import { Component, OnInit, inject } from '@angular/core';
 import { UsuarioService } from '../../servicios/usuario.service';
 import { CommonModule } from '@angular/common';
 import { SocialAuthService } from '@abacritt/angularx-social-login';
-import { Router} from '@angular/router'
+import { Router, RouterLink, RouterLinkActive } from '@angular/router'
+
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink, RouterLinkActive],
   templateUrl: './header.componente.html',
   styleUrl: './header.componente.css',
 })

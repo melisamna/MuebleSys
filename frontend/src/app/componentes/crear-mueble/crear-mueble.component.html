@@ -1,0 +1,77 @@
+<h2>Registrar nuevo mueble</h2>
+
+<hr>
+<form [formGroup]="form" (ngSubmit)="agregarMueble()">
+
+    <div>
+        <label>Nombre del mueble:</label><br>
+        <input type="text" formControlName="nombre_mueble" placeholder="Ej. Silla Ergonomica">
+        <div *ngIf="form.get('nombre_mueble')?.invalid && form.get('nombre_mueble')?.touched">
+            <Small style="color:red;">El nombre es obligatorio</Small>
+        </div>
+
+        <div>
+            <label>Descripción:</label><br>
+            <textarea formControlName="descripcion" placeholder="Detalles del material, color, etc."></textarea>
+        </div>
+
+        <div>
+            <label>Precio ($):</label><br>
+            <input type="number" formControlName="precio" step="0.01" placeholder="0.00">
+        </div>
+
+        <div>
+            <label>Cantidad en inventario:</label><br>
+            <input type="number" formControlName="stockActual" placeholder="0">
+        </div>
+
+        <div>
+            <label>Stock Minimo (Alerta):</label><br>
+            <input type="number" formControlName="stockMinimo">
+        </div>
+
+        <div>
+            <label>Url de la imagen :</label><br>
+            <input type="text" formControlName="imagen" placeholder="https://imagen.jpg">
+        </div>
+
+        <div>
+            <label>Categoria:</label><br>
+            <select formControlName="categoria_id">
+                <option [ngValue]="null" disabled>Seleccione una categoría</option>
+                <option *ngFor="let cat of listaCategorias" [value]="cat.categoria_id">
+                    {{cat.nombre_categoria}}
+                </option>
+            </select>
+        </div>
+
+        <div>
+            <label>Sucursal:</label><br>
+            <select formControlName="sucursal_id">
+                <option [ngValue]="null" disabled>Seleccione una sucursal</option>
+                <option *ngFor="let suc of listaSucursales" [value]="suc.sucursal_id">
+                    {{suc.direccion_sucursal}}
+                </option>
+            </select>
+        </div>
+
+        <br>
+
+        <button type="submit" [disabled]="form.invalid || form.pending">
+            {{id !== 0 ? 'Actualizar' : 'Guardar'}} Mueble
+        </button>
+
+        <button type="button" routerLink="/inventario">
+            Cancelar
+        </button>
+    </div>
+</form>
+
+<p *ngIf="form.invalid && form.touched" style="color: red;">
+    *Por favor, completa todos los campos obligatorios antes de guardar
+</p>
+<div *ngIf="form.get('nombre_mueble')?.hasError('nombreEnSucursalTomado')">
+    <small style="color:orange;">
+        Ya existe un mueble con este nombre en la sucursal seleccionada.
+    </small>
+</div>

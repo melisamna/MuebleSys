@@ -1,6 +1,8 @@
 <div >
   <div *ngIf="datos">
-    <img [src]="datos.picture || datos.foto" alt="Perfil"
+    <img [src]="datos.picture || datos.foto" 
+    alt="Perfil"
+    referrerpolicy="no-referrer"
     (error)="onImgError($event)">
     <span>Bienvenido, 
       <strong>
@@ -9,5 +11,20 @@
     </span>
   </div>
   
-  <button (click)="onLogout()">Cerrar Sesión</button>
+  <button *ngIf="datos" (click)="onLogout()">Cerrar Sesión</button>
+
+  <li *ngIf="datos">
+    <a [routerLink]="['/home']" routerLinkActive="active" style="cursor: pointer;">
+      <i></i>Inicio
+    </a>
+    <a [routerLink]="['/inventario']" routerLinkActive="active" style="cursor: pointer;">
+      <i></i>Inventario
+    </a>
+     <a [routerLink]="['/crear-mueble']" routerLinkActive="active" style="cursor: pointer;">
+      <i></i>crear
+    </a>
+         <a [routerLink]="['/papelera']" routerLinkActive="active" style="cursor: pointer;">
+      <i></i>Papelera
+    </a>
+  </li>
 </div>

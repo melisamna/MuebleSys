@@ -1,0 +1,17 @@
+<h3>Papelera de muebles</h3>
+<table>
+    <thead>
+        <tr>
+        <th>Nombre</th>
+        <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let m of listaInactivos">
+            <td>{{m.nombre_mueble}}</td>
+            <td>
+                <button (click)="onRestaurar(m.mueble_id)"><i></i> Restaurar</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
