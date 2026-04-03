@@ -6,6 +6,7 @@ export const noAuthGuard: CanActivateFn = () => {
     const token = localStorage.getItem('token');
 
     if (token) {
+        console.log('Token encontrado, rediriegiendo a home');
         //tiene token puede acceder al home
         router.navigate(['/home']);
         return false;

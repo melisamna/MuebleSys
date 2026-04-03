@@ -1,0 +1,29 @@
+<button routerLink="/crear"><i></i> Nuevo Mueble</button>
+<table>
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Categoria</th>
+            <th>Descripcion</th>
+            <th>Precio</th>
+            <th>Stock</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let m of muebles">
+            <td>{{ m.nombre_mueble }}</td>
+            <td>{{ m.Categoria?.nombre_categoria }}</td>
+            <td>{{ m.descripcion}}</td>
+            <td>{{ m.precio }}</td>
+            <td><span [class.badge]="true" [class.bg-success]="m.stockActual> m.stockMinimo" [class.bg-danger]="m.stockActual <= m.stockMinimo">
+            {{ m.stockActual }}</span>
+        </td>
+            <td>
+                <button [routerLink]="['/editar', m.mueble_id]"><i></i>Editar</button>
+                
+                <button (click)="onEliminar(m.mueble_id)">Eliminar</button>
+            </td>
+        </tr>
+    </tbody>
+</table>

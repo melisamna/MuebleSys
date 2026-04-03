@@ -1,8 +1,12 @@
 import express from "express";
 import cors from "cors";
 import rutasUsuario from "../rutas/usuario.js";
-import rutasMuebles from "../rutas/mueble.js"
+import rutasMuebles from "../rutas/mueble.js";
+import rutasCategorias from "../rutas/categoria.js";
+import rutasSucursales from "../rutas/sucursal.js";
 import db from "../db/conexion.js";
+import { configurarAsociasiones } from "./asociaciones.js";
+
 
 export class Server{
     private app: express.Application;
@@ -48,6 +52,8 @@ export class Server{
 
     routes(){
         this.app.get("/ping",(req, res)=> res.send("el servidor esta vivo"));
+        this.app.use('/api/categorias', rutasCategorias);
+        this.app.use('/api/sucursales', rutasSucursales);
         this.app.use("/api/usuarios", rutasUsuario);
         this.app.use("/api/muebles", rutasMuebles);
     }
@@ -58,13 +64,13 @@ export class Server{
         try {
         await db.authenticate();
         console.log("Conexion a la base de datos establecida");
+        // para hacer los joins
+        configurarAsociasiones();
         } catch (error) {
             //si hay un error, lo muestra en la consola
             console.log("Error al conectar a la base de datos", error);
         }
-    }
-
-    
+    }    
 }
 
 export default Server;

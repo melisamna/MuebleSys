@@ -9,6 +9,9 @@ import { authInterceptor } from './interceptores/auth.interceptor';
 import { provideToastr } from 'ngx-toastr';
 import { provideAnimations } from '@angular/platform-browser/animations';
 
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),

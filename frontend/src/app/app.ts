@@ -15,20 +15,22 @@ import { SocialAuthService } from '@abacritt/angularx-social-login';
 
 export class App implements OnInit {
   router = inject(Router);
-  mostrarHeader: boolean = true;
+  mostrarHeader: boolean = false;
 
   //configuracion de inactividad
   timeoutId:any;
   // Aqui son 30 minutos
+  //tiempoLimite = 10 * 1000;
   tiempoLimite = 30 * 60 * 1000;
 
   ngOnInit(): void {
+    
       // escuchamos los cambios de ruta para ocultar el header en el login
       this.router.events.pipe(
         filter(event => event instanceof NavigationEnd)
       ).subscribe((event: any) => {
         // si la ruta NO es /login, ocultamos el header, sino lo mostramos
-        this.mostrarHeader = !(event.url.includes('/login'));
+        this.mostrarHeader = !(event.url.includes('/login') || event.url === '/' || event.url === '');
 
         //manejo del temporizador segun la ruta
         if (event.url.includes('/login')){
@@ -37,7 +39,26 @@ export class App implements OnInit {
           this.iniciarTemporizador();
         }
       });
+
+      //metodo que revisa cada 5 minutos si el token ya esxpiró
+setInterval(() => {
+        const token = localStorage.getItem('token');
+        if (!token) return;
+
+        try {
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            const ahora = Math.floor(Date.now() / 1000);
+
+            if (payload.exp < ahora) {
+                console.warn('Token JWT expirado, cerrando sesión...');
+                this.cerrarSesion();
+            }
+        } catch {
+            this.cerrarSesion();
+        }
+    }, 5000);
   }
+
 
   //---------LOGICA PARA DETECCION DE ACTIVIDAD
 
@@ -72,7 +93,7 @@ export class App implements OnInit {
     private authService = inject(SocialAuthService);
 
     cerrarSesion(){
-      console.warn("sesión expirada tra 30 minutos de inactividad");
+      console.warn("sesión expirada tras 30 minutos de inactividad");
       localStorage.removeItem('token');
       this.authService.signOut().finally(()=>{
         this.router.navigate(['/login']);

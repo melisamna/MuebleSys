@@ -50,9 +50,16 @@ try {
     }, process.env.SECRET_KEY || 'MuebleSys123',{
         //Tiempo de expiración del token
         expiresIn: '1h'
+        //expiresIn: '30m'
     });
     // Devolvemos el token al frontend
-    res.json({token: sessionToken});
+    res.json({token: sessionToken, 
+        usuario:{
+            nombre_usuario: name,
+            foto: picture,
+            username: email
+        }
+    });
 }  catch (error: any) {
     // Acceder a los errores internos de tedious
     const erroresParent = error?.parent?.[Symbol.iterator] 

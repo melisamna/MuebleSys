@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon dist/index.js",
+    "dev": "nodemon src/index.ts",
     "typescript": "tsc --watch"
   },
   "keywords": [],
@@ -34,6 +34,7 @@
     "@types/node": "^25.5.0",
     "nodemon": "^3.1.14",
     "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^6.0.2"
   }
 }
