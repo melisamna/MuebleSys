@@ -1,30 +1,36 @@
-<div >
-  <div *ngIf="datos">
-    <img [src]="datos.picture || datos.foto" 
-    alt="Perfil"
-    referrerpolicy="no-referrer"
-    (error)="onImgError($event)">
-    <span>Bienvenido, 
-      <strong>
-        {{ datos.name || datos.nombre || datos.displayName || 'Usuario' }}
-      </strong>
-    </span>
-  </div>
-  
-  <button *ngIf="datos" (click)="onLogout()">Cerrar Sesión</button>
+<header class="header">
+  <div class="header-inner">
+    
+    <div class="logo" [routerLink]="['/home']" style="cursor: pointer;">
+      <span class="logo-mueble">Mueble</span><span class="logo-sys">Sys</span>
+    </div>
 
-  <li *ngIf="datos">
-    <a [routerLink]="['/home']" routerLinkActive="active" style="cursor: pointer;">
-      <i></i>Inicio
-    </a>
-    <a [routerLink]="['/inventario']" routerLinkActive="active" style="cursor: pointer;">
-      <i></i>Inventario
-    </a>
-     <a [routerLink]="['/crear-mueble']" routerLinkActive="active" style="cursor: pointer;">
-      <i></i>crear
-    </a>
-         <a [routerLink]="['/papelera']" routerLinkActive="active" style="cursor: pointer;">
-      <i></i>Papelera
-    </a>
-  </li>
-</div>
+    <nav class="nav-links" *ngIf="datos">
+    <a [routerLink]="['/home']" routerLinkActive="active">Inicio</a>
+    <a [routerLink]="['/inventario']" routerLinkActive="active">Inventario</a>
+    <a [routerLink]="['/papelera']" routerLinkActive="active">Papelera</a>
+    </nav>
+
+    <div class="header-actions"  *ngIf="datos">
+      <div class="notificacion-icon" [routerLink]="['/dashboard']" style="cursor: pointer; position: relative;">
+        <span>🔔</span>
+        <span class="badge" *ngIf="cantidadNotificaciones > 0"> {{ cantidadNotificaciones }}</span>
+      </div>
+
+      <div class="user-chip">
+        <img class="avatar"
+        [src]="datos.picture || datos.foto" 
+        alt="Perfil"
+        referrerpolicy="no-referrer"
+        (error)="onImgError($event)">
+
+        <span>
+        {{ datos.name || datos.nombre || datos.displayName || 'Usuario' }}
+      </span>
+      </div>
+
+      <button class="btn-logout" *ngIf="datos" (click)="onLogout()">Cerrar Sesión</button>
+  </div>
+
+  </div>
+</header>

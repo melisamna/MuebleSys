@@ -3,6 +3,7 @@ import { UsuarioService } from '../../servicios/usuario.service';
 import { CommonModule } from '@angular/common';
 import { SocialAuthService } from '@abacritt/angularx-social-login';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router'
+import { NotificacionService } from '../../servicios/notificacion.service';
 
 
 @Component({
@@ -16,7 +17,10 @@ export class HeaderComponente implements OnInit {
   private _usuarioService = inject(UsuarioService);
   private authService = inject(SocialAuthService);
   private router = inject(Router);
+  private _notiService  = inject(NotificacionService);
+
   datos: any;
+  cantidadNotificaciones: number = 0;
 
   ngOnInit() {
     //escuchamos el megafono para actualizar el header cuando alguien inicie sesion
@@ -26,6 +30,7 @@ export class HeaderComponente implements OnInit {
         console.log("URL de la imagen", this.datos?.foto);
 
     if (this.datos) {
+      this.obtenerContadorNotificaciones();
       //si se imprime algo, mira los nombres de las llaves
       console.log('header actualizado con exito:', this.datos.name || this.datos.nombre_usuario);
     } else {
@@ -36,6 +41,15 @@ export class HeaderComponente implements OnInit {
     console.error('Error al obtener el usuario en el header:', err)
   });
 }
+
+  obtenerContadorNotificaciones() {
+    this._notiService.getNotificacion().subscribe({
+      next: (data) => {
+        this.cantidadNotificaciones = data.length;
+      },
+      error: (e) => console.error('Error al cargar contador', e)
+    });
+  }
 
   onLogout() {
     //limpiamos los datos de nuestro servicio y localstorage

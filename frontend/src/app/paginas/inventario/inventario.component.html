@@ -1,7 +1,24 @@
-<div>
-    <h1>Gestión de Inventario</h1>
+<div class="inventory-container">
+<div class="page-header">
+    <div>
+        <h1>Inventario</h1>
+        <p>Gestión de productos y stock</p>
+    </div>
+    <button class="btn-primary" routerLink="/crear">+ Agregar Producto</button>
 
-    <app-tabla-muebles [muebles]="listMuebles"  (eliminar)="eliminarMuebles($event)">
+    </div>
 
-    </app-tabla-muebles>
+    <!-- KPIs -->
+    <div class="kpi-row">
+        <div class="kpi-card kpi-total">
+            <span class="kpi-label">📦 Total productos</span>
+            <span class="kpi-val">{{listMuebles.length}}</span>
+        </div>
+        <div class="search-row">
+            <input type="text" class="search-input" placeholder="🔍 Buscar producto..."  />
+        </div>
+    </div>
+        <app-tabla-muebles [muebles]="listMuebles"  (eliminar)="eliminarMuebles($event)">
+        </app-tabla-muebles>
 </div>
+   

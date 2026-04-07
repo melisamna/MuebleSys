@@ -1,5 +1,5 @@
-<button routerLink="/crear"><i></i> Nuevo Mueble</button>
-<table>
+<div class="table wrapper">
+<table class="main-table">
     <thead>
         <tr>
             <th>Nombre</th>
@@ -7,23 +7,27 @@
             <th>Descripcion</th>
             <th>Precio</th>
             <th>Stock</th>
-            <th>Acciones</th>
+            <th class="text-center">Acciones</th>
         </tr>
     </thead>
+    
+  
+
     <tbody>
         <tr *ngFor="let m of muebles">
-            <td>{{ m.nombre_mueble }}</td>
-            <td>{{ m.Categoria?.nombre_categoria }}</td>
-            <td>{{ m.descripcion}}</td>
-            <td>{{ m.precio }}</td>
-            <td><span [class.badge]="true" [class.bg-success]="m.stockActual> m.stockMinimo" [class.bg-danger]="m.stockActual <= m.stockMinimo">
-            {{ m.stockActual }}</span>
-        </td>
-            <td>
-                <button [routerLink]="['/editar', m.mueble_id]"><i></i>Editar</button>
-                
-                <button (click)="onEliminar(m.mueble_id)">Eliminar</button>
+            <td class="font-bold">{{ m.nombre_mueble }}</td>
+            <td><span class="category-tag">{{ m.Categoria?.nombre_categoria }}</span></td>
+            <td class="text-muted">{{ m.descripcion}}</td>
+            <td class="price">{{ m.precio }}</td>
+            <td><span [class]="m.stockActual > m.stockMinimo ? 'stock-badge success' : 'stock-badge danger'">
+                    {{ m.stockActual }}
+                </span>
+            </td>
+            <td class="actions">
+                <button class="btn-edit" [routerLink]="['/editar', m.mueble_id]"><i></i>Editar</button>
+                <button class="btn-delete" (click)="onEliminar(m.mueble_id)">Eliminar</button>
             </td>
         </tr>
     </tbody>
 </table>
+</div>

@@ -3,8 +3,31 @@ import { Mueble } from "../modelos/mueble.js";
 import { Categoria } from "../modelos/categoria.js";
 import { Sucursal } from "../modelos/sucursal.js";
 import Message from "tedious/lib/message.js";
+import { enviarAlertaStock } from '../servicios/email.service.js';
+import { Notificacion } from "../modelos/notificacion.js";
+import { Sequelize } from "sequelize";
 
+const verificarCrearNotificacion = async (mueble: any) => {
+    if (mueble.stockActual <= mueble.stockMinimo) {
+        const alertaExistente = await Notificacion.findOne({
+            where: { mueble_id: mueble.mueble_id, leida: false}
+        });
 
+        if (!alertaExistente) {
+            await Notificacion.create({
+                mensaje: `El mueble "${mueble.nombre_mueble}"tiene stock bajo (${mueble.stockActual} unidades)."`,
+                tipo: 'STOCK_BAJO',
+                mueble_id: mueble.mueble_id,
+                sucursal_id: mueble.sucursal_id,
+                leida: false,
+                fecha_creacion: Sequelize.fn('GETDATE')
+            })
+            console.log(`Notificacion generada para: ${mueble.nombre_mueble}`);
+            //Enviamos el correo de notificacion
+            await enviarAlertaStock(mueble.nombre_mueble, mueble.stockActual);
+        }
+    }
+}
 //obtener todos los muebles
 export const getMuebles = async (req: Request, res: Response)=>{
     try{
@@ -48,6 +71,8 @@ export const postMueble = async (req: Request, res: Response)=>{
             esActivo: true
         });
 
+        await verificarCrearNotificacion(nuevoMueble);
+
         res.json({ msg: `El mueble ${nombre_mueble} fue agregado con éxito`,
         id: nuevoMueble.getDataValue('mueble_id')});
 
@@ -59,6 +84,9 @@ export const postMueble = async (req: Request, res: Response)=>{
 
 //editar datos especificos del mueble
 export const updateMueble = async (req: Request, res: Response) =>{
+    console.log('datos recibidos en el body:', req.body);
+    console.log('id recibido en params:', req.params.id);
+    
     const { id } = req.params;
     const { nombre_mueble, descripcion, precio, stockActual, stockMinimo,imagen, categoria_id} = req.body;
 
@@ -74,6 +102,9 @@ export const updateMueble = async (req: Request, res: Response) =>{
             await mueble.update({
                 nombre_mueble, descripcion, precio, stockActual, stockMinimo,imagen, categoria_id
             });
+            
+            await verificarCrearNotificacion(mueble);
+
             res.json({msg:'el mueble fue actualizado correctamente'});
         } else{
             res.status(404).json({msg:`No existe un mueble con el id ${id}`});

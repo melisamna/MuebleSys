@@ -6,6 +6,7 @@ import rutasCategorias from "../rutas/categoria.js";
 import rutasSucursales from "../rutas/sucursal.js";
 import db from "../db/conexion.js";
 import { configurarAsociasiones } from "./asociaciones.js";
+import rutasNotificaciones from "../rutas/notificacion.js";
 
 
 export class Server{
@@ -56,6 +57,7 @@ export class Server{
         this.app.use('/api/sucursales', rutasSucursales);
         this.app.use("/api/usuarios", rutasUsuario);
         this.app.use("/api/muebles", rutasMuebles);
+        this.app.use('/api/notificaciones', rutasNotificaciones);
     }
 
     async dbConexion(){

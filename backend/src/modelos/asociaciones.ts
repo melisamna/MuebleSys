@@ -1,6 +1,7 @@
 import { Mueble } from "./mueble.js";
 import { Categoria } from "./categoria.js";
 import { Sucursal } from "./sucursal.js";
+import { Notificacion } from "./notificacion.js";
 
 // para hacer inner join
 export const configurarAsociasiones = () =>{
@@ -19,6 +20,13 @@ export const configurarAsociasiones = () =>{
         //el campo de id en la tabbla
         targetKey: 'sucursal_id',
         as: 'Sucursal'
+    });
+    // Aquí estableces la relación
+    Notificacion.belongsTo(Mueble, {
+        foreignKey: 'mueble_id' 
+    });
+    Mueble.hasMany(Notificacion, {
+        foreignKey: 'mueble_id' 
     });
     
     console.log('Asociaciones de base de datos cargadas.')
