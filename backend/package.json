@@ -22,6 +22,7 @@
     "google-auth-library": "^10.6.2",
     "jsonwebtoken": "^9.0.3",
     "mysql2": "^3.20.0",
+    "nodemailer": "^8.0.4",
     "sequelize": "^6.37.8",
     "tedious": "^19.2.1"
   },
@@ -32,6 +33,7 @@
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^25.5.0",
+    "@types/nodemailer": "^8.0.0",
     "nodemon": "^3.1.14",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",

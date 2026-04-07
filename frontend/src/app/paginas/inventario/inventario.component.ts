@@ -3,11 +3,12 @@ import { MuebleService } from '../../servicios/mueble.service';
 import { Mueble } from '../../modelos/mueble';
 import { TablaMueblesComponent } from "../../componentes/tabla-muebles/tabla-muebles.component";
 import { CommonModule } from '@angular/common';
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-inventariot',
   standalone: true,
-  imports: [CommonModule, TablaMueblesComponent],
+  imports: [CommonModule, TablaMueblesComponent, RouterLink],
   templateUrl: './inventario.component.html',
   styleUrl: './inventario.component.css',
 })

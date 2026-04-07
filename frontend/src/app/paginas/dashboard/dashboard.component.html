@@ -1,0 +1,17 @@
+<div>
+    <h2>Panel de control - MuebleSys</h2>
+
+    <div>
+        <div>
+            <app-tarjeta-notificacion
+            *ngFor="let a of misAlertas"
+            [alerta]="a"
+            (accionRevisado)="atenderAlerta($event)">
+        </app-tarjeta-notificacion>
+    </div>
+</div>
+
+    <div *ngIf="misAlertas.length === 0">
+        <p>No hay alertas pendientes</p>
+    </div>
+</div>

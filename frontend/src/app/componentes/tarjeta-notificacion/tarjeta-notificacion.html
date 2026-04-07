@@ -1,0 +1,27 @@
+<div>
+    <div>
+
+        <div>
+            <i></i>
+        </div>
+
+        <div>
+            <div>
+                <h5> Stock bajo detectado</h5>
+                <p> {{ alerta.mensaje }}</p>
+                <p>
+                    <small>
+                        <i></i>{{ alerta.fecha_creacion | date: 'medium' }}
+                    </small>
+                </p>
+            </div>
+        </div>
+
+        <div>
+            <button (click)="marcarRevisado()">
+                <i></i>Revisado
+            </button>
+        </div>
+        
+    </div>
+</div>

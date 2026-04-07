@@ -1,17 +1,31 @@
-<h3>Papelera de muebles</h3>
-<table>
+<div class="inventory-container">
+    <div class="page-header">
+        <div>
+            <h1>Papelera de muebles</h1>
+            <p> Muebles desactivados que pueden ser restaurados al inventario.</p>
+        </div>
+    </div>
+
+    <div class="table-wrapper">
+    <table class="main-table">
     <thead>
         <tr>
         <th>Nombre</th>
-        <th>Acciones</th>
+        <th class="text-right">Acciones</th>
         </tr>
     </thead>
     <tbody>
         <tr *ngFor="let m of listaInactivos">
-            <td>{{m.nombre_mueble}}</td>
-            <td>
-                <button (click)="onRestaurar(m.mueble_id)"><i></i> Restaurar</button>
+            <td class="font-bold">{{m.nombre_mueble}}</td>
+            <td class="actions">
+                <button class="btn-restore" (click)="onRestaurar(m.mueble_id)"><i></i> Restaurar</button>
             </td>
         </tr>
+        <tr *ngIf="listaInactivos.length === 0">
+            <td colspan="2" class="text-center text-muted">No hay muebles en la papelera</td>
+        </tr>
     </tbody>
-</table>
+    </table>
+    </div>
+</div>
+
