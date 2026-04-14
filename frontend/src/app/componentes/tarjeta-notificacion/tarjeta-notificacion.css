@@ -1,0 +1,98 @@
+/* Contenedor principal para dar espacio */
+.notificaciones-container {
+    padding: 8px 0;
+    width: 100%;
+}
+
+/* La tarjeta horizontal */
+.notif-card.horizontal {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 16px 24px;
+    background: #ffffff;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    /* Borde izquierdo sutil pero elegante como en tu inventario */
+    border-left: 5px solid #f6c23e; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    margin-bottom: 12px;
+    transition: all 0.2s ease;
+}
+
+.notif-card.horizontal:hover {
+    transform: translateX(4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    border-color: #cbd5e0;
+}
+
+/* Icono de advertencia */
+.notif-icono {
+    font-size: 1.2rem;
+    color: #f6c23e; /* Color ámbar para stock bajo */
+    display: flex;
+    align-items: center;
+}
+
+/* Cuerpo de la notificación */
+.notif-body {
+    flex: 1;
+}
+
+/* Alineación de título, mensaje y fecha */
+.notif-content-wrapper {
+    display: flex;
+    align-items: baseline; /* Alinea los textos por su base */
+    gap: 15px;
+    flex-wrap: wrap; /* Por si el mensaje es muy largo */
+}
+
+.notif-titulo {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1a202c;
+    margin: 0;
+    min-width: 160px; /* Mantiene los títulos alineados */
+}
+
+.notif-mensaje {
+    font-size: 14px;
+    color: #4a5568;
+    margin: 0;
+    flex: 1; /* Toma el espacio disponible */
+}
+
+.notif-tiempo {
+    font-size: 12px;
+    color: #9ca3af;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+/* Botón Revisado (Estilo botón secundario de tu sistema) */
+.notif-btn-revisado {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    background: #fff;
+    color: #4a5568;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.notif-btn-revisado:hover {
+    background: #2352cc; /* Tu azul primary */
+    color: #fff;
+    border-color: #2352cc;
+}
+
+.notif-btn-revisado i {
+    font-size: 10px;
+}

@@ -11,6 +11,9 @@ export interface Mueble {
     stockMinimo: number;
     esActivo?: boolean;
     fechaCreacion?: Date;
+    nombre_categoria?: string;
+    direccion_sucursal?: string;
+    sucursal_activa?: boolean;
 
     Categoria?: {
         nombre_categoria: string;

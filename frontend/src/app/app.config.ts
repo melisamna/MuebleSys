@@ -1,4 +1,4 @@
-import { ApplicationConfig, importProvidersFrom, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { ApplicationConfig, importProvidersFrom, LOCALE_ID, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
@@ -10,7 +10,10 @@ import { provideToastr } from 'ngx-toastr';
 import { provideAnimations } from '@angular/platform-browser/animations';
 
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
+import { registerLocaleData } from '@angular/common';
+import localEs from '@angular/common/locales/es';
+registerLocaleData(localEs);
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -21,11 +24,8 @@ export const appConfig: ApplicationConfig = {
     ),
     importProvidersFrom(SocialLoginModule),
     provideAnimations(),
-    provideToastr({
-      timeOut: 3000,
-      positionClass: 'toast-top-center',
-      preventDuplicates: true,
-    }),
+    provideCharts(withDefaultRegisterables()),
+    {provide: LOCALE_ID, useValue: 'es'},
 
     {
       //configuracion del servicios de autenticacion social

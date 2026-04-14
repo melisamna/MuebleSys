@@ -6,6 +6,9 @@ import Message from "tedious/lib/message.js";
 import { enviarAlertaStock } from '../servicios/email.service.js';
 import { Notificacion } from "../modelos/notificacion.js";
 import { Sequelize } from "sequelize";
+import fs from 'fs';
+import path from "path";
+import { MuebleView } from "../modelos/muebleView.js";
 
 const verificarCrearNotificacion = async (mueble: any) => {
     if (mueble.stockActual <= mueble.stockMinimo) {
@@ -31,11 +34,11 @@ const verificarCrearNotificacion = async (mueble: any) => {
 //obtener todos los muebles
 export const getMuebles = async (req: Request, res: Response)=>{
     try{
-        const listaMuebles = await Mueble.findAll({ where:{esActivo: true}, 
-        include: [
-        {model: Categoria, as: 'Categoria', attributes:['nombre_categoria']},
-        { model: Sucursal, as:'Sucursal', attributes: ['direccion_sucursal', 'telefono_sucursal'], where: {esActivo: true}}
-        ]
+        const listaMuebles = await MuebleView.findAll({
+        where: {
+            esActivo: true,
+            sucursal_activa: true
+        }
     });
 
         console.log('Muebles encontrados:',listaMuebles.length);
@@ -65,9 +68,14 @@ export const postMueble = async (req: Request, res: Response)=>{
             return res.status(400).json({msg: `Ya existe un mueble llamado "${nombre_mueble}" en esta sucursal`
             });
         }
+
+        //obtener el nombre del archivo que genero multer
+        const nombreImagen = req.file ? req.file.filename : '';
         //si no existe, lo creamos
         const nuevoMueble =   await Mueble.create({
             ...req.body,
+            //se guarda el archivo en la columna imagen
+            imagen: nombreImagen,
             esActivo: true
         });
 
@@ -88,7 +96,7 @@ export const updateMueble = async (req: Request, res: Response) =>{
     console.log('id recibido en params:', req.params.id);
     
     const { id } = req.params;
-    const { nombre_mueble, descripcion, precio, stockActual, stockMinimo,imagen, categoria_id} = req.body;
+    const { nombre_mueble, descripcion, precio, stockActual, stockMinimo, categoria_id, imagen} = req.body;
 
     if(!id){
         return res.status(400).json({ msg:"ID no proporcionado"});
@@ -99,8 +107,25 @@ export const updateMueble = async (req: Request, res: Response) =>{
         const mueble = await Mueble.findByPk(idNumber);
 
         if(mueble){
+            let nombreImagenFinal = mueble.getDataValue('imagen');
+
+            if (req.file){
+                //si el usuario subio una nueva foto
+                nombreImagenFinal = req.file.filename;
+
+                //borrar la imagen anterior de la carpeta galeria
+                const imagenVieja = mueble.getDataValue('imagen');
+                if (imagenVieja){
+                    const pathViejo = path.resolve(`galeria/${imagenVieja}`);
+                    if (fs.existsSync(pathViejo)) {
+                        fs.unlinkSync(pathViejo);
+                    }
+                }
+            }
+
+            // actualizar el registro
             await mueble.update({
-                nombre_mueble, descripcion, precio, stockActual, stockMinimo,imagen, categoria_id
+                nombre_mueble, descripcion, precio, stockActual, stockMinimo, categoria_id,imagen: nombreImagenFinal
             });
             
             await verificarCrearNotificacion(mueble);
@@ -114,7 +139,7 @@ export const updateMueble = async (req: Request, res: Response) =>{
         res.status(500).json({msg:'Error al actualizar el mueble', error});
     }
 
-}
+};
 
 //eliminar mueble( cambiar activo a false)
 export const deleteMueble = async (req: Request, res: Response) => {
@@ -167,11 +192,11 @@ export const deleteMueble = async (req: Request, res: Response) => {
     //obtener los muebles desactivados
 export const getPapelera = async (req: Request, res: Response)=>{
     try{
-        const listaInactivos = await Mueble.findAll({ where:{esActivo: false}, 
-        include: [
-        {model: Categoria, as: 'Categoria', attributes:['nombre_categoria']},
-        { model: Sucursal, as:'Sucursal', attributes: ['direccion_sucursal', 'telefono_sucursal'], where: {esActivo: true}}
-        ]
+        const listaInactivos = await MuebleView.findAll({
+        where: {
+            esActivo: false,
+            sucursal_activa: true
+        }
     });
 
         console.log('Muebles encontrados:',listaInactivos.length);
@@ -220,3 +245,27 @@ export const verificarNombreMueble = async (req: Request, res: Response) => {
         res.status(500).json({msg:'Error al verificar'});
     }
 }
+
+export const getEstadisticasCategorias = async (req: Request, res: Response) => {
+    try {
+        const estadisticas = await Mueble.findAll({
+            where: { esActivo: true },
+            attributes: [
+                [Sequelize.fn('COUNT', Sequelize.col('mueble_id')), 'total'],
+                [Sequelize.col('Categoria.nombre_categoria'), 'nombre']
+            ],
+            include: [{
+                model: Categoria,
+                as: 'Categoria',
+                attributes: []
+            }],
+            group: ['Categoria.nombre_categoria'],
+            raw: true
+        });
+        res.json(estadisticas);
+    } catch (error: any) {
+        console.error("Error en el servidor:", error.message);
+        res.status(500).json({ msg: 'Error al generar estadísticas' });
+    }
+};
+

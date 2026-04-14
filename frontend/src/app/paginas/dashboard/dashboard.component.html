@@ -1,17 +1,70 @@
-<div>
-    <h2>Panel de control - MuebleSys</h2>
-
-    <div>
-        <div>
-            <app-tarjeta-notificacion
-            *ngFor="let a of misAlertas"
-            [alerta]="a"
-            (accionRevisado)="atenderAlerta($event)">
-        </app-tarjeta-notificacion>
+<div class="inventory-container">
+    <div class="page-header">
+        <h1 style="font-weight: 800; color: #1a202c; margin: 0;">Panel de Control</h1>
+        <p style="color: #718096; margin-top: 4px;">Resumen general del sistema y alertas</p>
     </div>
-</div>
 
-    <div *ngIf="misAlertas.length === 0">
-        <p>No hay alertas pendientes</p>
+    <div class="kpi-row">
+        <div class="kpi-card">
+            <span class="kpi-label">📦 Total productos</span>
+            <span class="kpi-val">{{listMuebles.length}}</span>
+        </div>
+        <div class="kpi-card stock-bajo">
+            <span class="kpi-label">⚠️ Stock bajo</span>
+            <span class="kpi-val">{{listNotis.length}}</span>
+        </div>
+        <div class="kpi-card inactivos">
+            <span class="kpi-label">🚫 Inactivos</span>
+            <span class="kpi-val">{{listaInactivos.length}}</span>
+        </div>
+        <div class="kpi-card date-recent-kpi">
+                <div class="d-flex align-items-center mb-3 pb-2 border-bottom">
+                    <span class="me-2">📅</span>
+                    <span class="kpi-label m-0 text-capitalize">{{ today | date:'fullDate' }}</span>
+                </div>
+
+                <div class="recent-list-mini">
+                    <h6 class="panel-section-title"> Últimos muebles agregados</h6>
+                    <div *ngFor="let m of mueblesRecientes" class="mini-item d-flex align-items-center">
+                        <span class="dot-indicator"></span>
+                        <span class="item-name-mini text-truncate">{{ m.nombre_mueble }}</span>
+                        <span class="ms-auto badge-new">Nuevo</span>
+                    </div>
+                    <div *ngIf="mueblesRecientes.length === 0" class="text-muted small">
+                        Sin movimientos hoy
+                    </div>
+                </div>
+            </div>
+
     </div>
+
+    <div class="dashboard-main-grid">
+        
+        <div class="content-card">
+            <div class="card-header-custom">
+                <h6 class="panel-section-title">Muebles por Categoria</h6>
+            </div>
+            <div class="card-body-custom">
+                <div class="chart-wrapper">
+                    <canvas baseChart [data]="doughnutChartData" [type]="doughnutChartType"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="alerts-column">
+            
+
+            <h3 class="panel-section-title">Alertas de Sistema</h3>
+            <div class="alerts-scroll mb-4">
+                <app-tarjeta-notificacion
+                    *ngFor="let a of misAlertas"
+                    [alerta]="a"
+                    (accionRevisado)="atenderAlerta($event)">
+                </app-tarjeta-notificacion>
+                <div *ngIf="misAlertas.length === 0" class="empty-state">
+                    <p class="m-0">No hay alertas pendientes</p>
+                </div>
+            </div>
+</div> 
+</div> 
 </div>

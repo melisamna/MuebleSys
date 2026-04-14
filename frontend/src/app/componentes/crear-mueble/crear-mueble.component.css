@@ -1,0 +1,166 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  background: #F7F8FC;
+  padding: 110px 24px 40px 24px;
+}
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+h2 {
+  font-size: 26px;
+  font-weight: 700;
+  color: #1A1D2E;
+  margin-bottom: 6px;
+  text-align: center; 
+}
+
+hr {
+  border: none;
+  border-top: 2px solid #E5E7EB;
+  margin: 0 auto 28px auto;
+  max-width: 680px;
+}
+
+form {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(35, 82, 204, 0.09);
+  padding: 36px 40px;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; 
+  gap: 20px 28px;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #6B7280;
+  margin-bottom: 8px;
+}
+
+input[type="text"],
+input[type="number"],
+textarea,
+select {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #E5E7EB;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #1A1D2E;
+  background: #F9FAFB;
+  transition: all 0.2s;
+  outline: none;
+  box-sizing: border-box;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: #2352CC;
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(35, 82, 204, 0.08);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.button-group {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 12px;
+  margin-top: 10px;
+  border-top: 1px solid #F3F4F6;
+  padding-top: 24px;
+}
+
+button[type="submit"] {
+  flex: 2; 
+  padding: 14px;
+  background: #2352CC;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+button[type="submit"]:hover:not(:disabled) {
+  background: #1a3fa0;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(35, 82, 204, 0.23);
+}
+
+button[type="button"][routerLink] {
+  flex: 1;
+  padding: 14px;
+  background: #fff;
+  color: #6B7280;
+  border: 2px solid #E5E7EB;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+button[type="button"][routerLink]:hover {
+  border-color: #E53E3E;
+  color: #E53E3E;
+  background: #FEF2F2;
+}
+
+.file-upload-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.btn-select-file {
+  width: fit-content;
+  padding: 8px 16px;
+  background: #F0F5FF;
+  color: #2352CC;
+  border: 2px solid #2352CC;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.error-msg {
+  color: #E53E3E;
+  font-size: 12px;
+  margin-top: 6px;
+  font-weight: 500;
+}
+
+.warning-banner {
+  background: #FFFBEB;
+  border-left: 4px solid #D69E2E;
+  padding: 12px;
+  border-radius: 8px;
+  color: #92400E;
+  font-size: 13px;
+  margin-top: 20px;
+  grid-column: 1 / -1;
+}

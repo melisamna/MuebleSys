@@ -1,0 +1,55 @@
+<div class="inventory-container">
+    <header class="page-header">
+        <h2 class="section-tittle"> Catálogo de Muebles</h2>
+            
+        <div class="filters-container">
+            <div class="filter-group">
+                <div class="search- wrapper">
+                    <input type="text" class="search-input" placeholder="🔍 Buscar mueble..." 
+                   [(ngModel)]="textoBusqueda" (keyup)="filtrarMuebles()">
+                </div>
+
+                <div class="price-wrapper">
+                    <span>Precio máx:</span>
+            <input type="number" class="price-input" [(ngModel)]="precioMaximo" (input)="filtrarMuebles()">
+                </div>
+
+                <div class="category-wrapper">
+                    <select class="search-input" [(ngModel)]="categoriaSeleccionada" (change)="filtrarMuebles()">
+                <option value="">Todas las categorías</option>
+                <option *ngFor="let cat of listaCategorias" [value]="cat.nombre_categoria">
+                    {{cat.nombre_categoria}}
+                </option>
+            </select>
+                </div>
+            </div>
+        </div>
+    </header>
+
+
+    <div class="catalog-grid">
+        <div class="card" *ngFor="let mueble of mueblesFiltrados">
+            
+                <div class="card-image">
+                    <img [src]="mueble.imagen ? URL_IMAGEN + mueble.imagen : 'assets/no-image.png'"
+                    [alt]="mueble.nombre_mueble">
+                </div>
+                
+                <div class="card-body">
+                    <h5 class="font-bold">{{mueble.nombre_mueble}}</h5>
+                    <p class="text-muted">{{ mueble.descripcion}}</p>
+                    <h4 class="price">{{mueble.precio | currency: 'MXN'}}</h4>
+                </div>
+
+                <div class="card-footer">
+                    <div [class]="mueble.stockActual > 5 ? 'stock-badge success' : 'stock-badge danger'">
+                    Stock: {{mueble.stockActual}} unidades
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="mueblesFiltrados.length === 0" class="empty-state">
+        <p>No hay muebles que coincidan con tu búsqueda.</p>
+    </div>
+    </div>

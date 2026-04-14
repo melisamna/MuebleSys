@@ -1,42 +1,64 @@
-<h2>Registrar nuevo mueble</h2>
-
-<hr>
+    <header class="page-header">
+        <h2 class="section-tittle"> Catálogo de Muebles</h2>
+    </header>
+    
 <form [formGroup]="form" (ngSubmit)="agregarMueble()">
-
-    <div>
-        <label>Nombre del mueble:</label><br>
-        <input type="text" formControlName="nombre_mueble" placeholder="Ej. Silla Ergonomica">
-        <div *ngIf="form.get('nombre_mueble')?.invalid && form.get('nombre_mueble')?.touched">
-            <Small style="color:red;">El nombre es obligatorio</Small>
+    <div class="form-grid">
+        
+        <div class="full-width">
+            <label>Nombre del mueble:</label>
+            <input type="text" formControlName="nombre_mueble" placeholder="Ej. Silla Ergonómica">
+            <div *ngIf="form.get('nombre_mueble')?.invalid && form.get('nombre_mueble')?.touched" class="error-msg">
+                <span *ngIf="form.get('nombre_mueble')?.errors?.['required']">El nombre es obligatorio</span>
+                <span *ngIf="form.get('nombre_mueble')?.errors?.['maxlength']">Máximo 50 caracteres</span>
+            </div>
         </div>
 
-        <div>
-            <label>Descripción:</label><br>
+        <div class="full-width">
+            <label>Descripción:</label>
             <textarea formControlName="descripcion" placeholder="Detalles del material, color, etc."></textarea>
+            <div class="error-msg"><span *ngIf="form.get('descripcion')?.errors?.['required']">La descripción es obligatoria</span></div>
         </div>
 
         <div>
-            <label>Precio ($):</label><br>
+            <label>Precio ($):</label>
             <input type="number" formControlName="precio" step="0.01" placeholder="0.00">
+            <div class="error-msg">
+            <span *ngIf="form.get('precio')?.errors?.['required']">El precio es obligatorio</span>
+                <span *ngIf="form.get('precio')?.errors?.['min']">El precio debe ser mayor a 0</span>
+                </div>
         </div>
 
         <div>
-            <label>Cantidad en inventario:</label><br>
+            <label>Cantidad en inventario:</label>
             <input type="number" formControlName="stockActual" placeholder="0">
+            <div class="error-msg">
+                <span *ngIf="form.get('stockActual')?.errors?.['required']">La cantidad es obligatoria</span>
+                <span *ngIf="form.get('stockActual')?.errors?.['min']">No puede ser negativo</span>
+            </div>
         </div>
 
         <div>
-            <label>Stock Minimo (Alerta):</label><br>
+            <label>Stock Mínimo (Alerta):</label>
             <input type="number" formControlName="stockMinimo">
+            <div class="error-msg">
+                <span *ngIf="form.get('stockMinimo')?.errors?.['required']">El stock mínimo es obligatorio</span>
+                <span *ngIf="form.get('stockMinimo')?.errors?.['min']">No puede ser negativo</span>
+        
+            </div>
+        </div>
+
+        <div class="file-upload-container">
+            <label>Imagen del mueble:</label>
+            <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" style="display: none;">
+            <button type="button" class="btn-select-file" (click)="fileInput.click()">
+                Seleccionar Archivo
+            </button>
+            <span *ngIf="selectedFile" class="error-msg" style="color: #4A5568">{{selectedFile.name}}</span>
         </div>
 
         <div>
-            <label>Url de la imagen :</label><br>
-            <input type="text" formControlName="imagen" placeholder="https://imagen.jpg">
-        </div>
-
-        <div>
-            <label>Categoria:</label><br>
+            <label>Categoría:</label>
             <select formControlName="categoria_id">
                 <option [ngValue]="null" disabled>Seleccione una categoría</option>
                 <option *ngFor="let cat of listaCategorias" [value]="cat.categoria_id">
@@ -46,7 +68,7 @@
         </div>
 
         <div>
-            <label>Sucursal:</label><br>
+            <label>Sucursal:</label>
             <select formControlName="sucursal_id">
                 <option [ngValue]="null" disabled>Seleccione una sucursal</option>
                 <option *ngFor="let suc of listaSucursales" [value]="suc.sucursal_id">
@@ -55,23 +77,18 @@
             </select>
         </div>
 
-        <br>
+        <div class="warning-banner" *ngIf="form.get('nombre_mueble')?.hasError('nombreEnSucursalTomado')">
+            ⚠️ Ya existe un mueble con este nombre en la sucursal seleccionada.
+        </div>
 
-        <button type="submit" [disabled]="form.invalid || form.pending">
-            {{id !== 0 ? 'Actualizar' : 'Guardar'}} Mueble
-        </button>
+        <div class="button-group">
+            <button type="submit" [disabled]="form.invalid || form.pending">
+                {{id !== 0 ? 'Actualizar' : 'Guardar'}} Mueble
+            </button>
 
-        <button type="button" routerLink="/inventario">
-            Cancelar
-        </button>
+            <button type="button" routerLink="/inventario">
+                Cancelar
+            </button>
+        </div>
     </div>
 </form>
-
-<p *ngIf="form.invalid && form.touched" style="color: red;">
-    *Por favor, completa todos los campos obligatorios antes de guardar
-</p>
-<div *ngIf="form.get('nombre_mueble')?.hasError('nombreEnSucursalTomado')">
-    <small style="color:orange;">
-        Ya existe un mueble con este nombre en la sucursal seleccionada.
-    </small>
-</div>

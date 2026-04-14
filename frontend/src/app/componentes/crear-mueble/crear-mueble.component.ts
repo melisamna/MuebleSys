@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { Categoria } from '../../modelos/categoria';
 import { Sucursal } from '../../modelos/sucursal';
 import { map,catchError, delay, of } from 'rxjs';
+import { AlertaService } from '../../servicios/alerta.servicio';
 
 
 @Component({
@@ -24,16 +25,20 @@ export class CrearMuebleComponent implements OnInit{
   id: number;
   operacion: string = 'Agregar';
 
+  selectedFile: File | null = null;
+  imagePreview: string | ArrayBuffer | null = null;
+
   constructor (
     private fb:FormBuilder,
     private _muebleService: MuebleService,
     private router: Router,
-    private aRoute: ActivatedRoute
+    private aRoute: ActivatedRoute,
+    private _alertaService: AlertaService
   ){ 
       this.form = this.fb.group({
       nombre_mueble: ['', [Validators.required, Validators.maxLength(50)]],
       descripcion: ['',Validators.required],
-      precio: [null, [Validators.required, Validators.min(0)]],
+      precio: [null, [Validators.required, Validators.min(0.01)]],
       stockActual: [null, [Validators.required, Validators.min(0)]],
       stockMinimo: [1, [Validators.required, Validators.min(0)]],
       categoria_id: [null, Validators.required],
@@ -93,57 +98,77 @@ export class CrearMuebleComponent implements OnInit{
       imagen: data.imagen
     });
     //bloquear estos campos para no modificar en edicion
-    this.form.get('nombre_mueble')?.disable();
-    this.form.get('descripcion')?.disable();
-    this.form.get('categoria_id')?.disable();
-    this.form.get('sucursal_id')?.disable();
+    //this.form.get('nombre_mueble')?.disable();
+    //this.form.get('descripcion')?.disable();
+    //this.form.get('categoria_id')?.disable();
+    //this.form.get('sucursal_id')?.disable();
     });
   }
 
+  //metodo para caprurar el archivo cuando el usuario lo selecciona (imagen)
+  onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+    if(file){
+      this.selectedFile = file;
+
+      //generar previsualizacion
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreview = reader.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
 
   agregarMueble(){
     //si el formulario es invalido  se cota la ejecucion
     if(this.form.invalid) return;
 
+    // usamos formData para poder enviar el archivo al servidor
+    const formData = new FormData();
     //extraemos todos loa valores incluyendo los bloqueados
-    const formValues = this.form.getRawValue();
+    const values = this.form.getRawValue();
 
     // creamos el objeto basado en los valores del formulario
-    const mueble: Mueble = {
-      nombre_mueble: this.form.value.nombre_mueble,
-      descripcion: this.form.value.descripcion,
-      precio: this.form.value.precio,
-      stockActual: this.form.value.stockActual,
-      stockMinimo: this.form.value.stockMinimo,
-      categoria_id: this.form.value.categoria_id,
-      sucursal_id: this.form.value.sucursal_id,
-      esActivo: true,
-      imagen: this.form.value.imagen
-    };
+      formData.append('nombre_mueble', values.nombre_mueble);
+      formData.append('descripcion' ,values.descripcion);
+      formData.append('precio', values.precio);
+      formData.append('stockActual', values.stockActual);
+      formData.append('stockMinimo', values.stockMinimo);
+      formData.append('categoria_id', values.categoria_id);
+      formData.append('sucursal_id', values.sucursal_id);
+      formData.append('esActivo','1');
+
+    //si hay foto la agregamos
+    if (this.selectedFile){
+      formData.append('imagen', this.selectedFile, this.selectedFile.name);
+    }
 
     if (this.id !==0){
       //Logica para EDITAR
-      this._muebleService.updateMueble(this.id, mueble).subscribe({
+      this._muebleService.updateMueble(this.id, formData).subscribe({
         next: () => {
-          alert('Mueble actualizado con éxito');
-          this.router.navigate(['/inventario']);
+          this._alertaService.exito('Mueble actualizado con éxito');
+          setTimeout(() => this.router.navigate(['/inventario']), 2000);
         },
-        error: (e) => console.error(e)
+        error: (e) => {
+          this._alertaService.error('No se pudo actualizar el mueble');
+        }
       });
     } else {
       //Lógica para crear
-    this._muebleService.saveMueble(mueble).subscribe({
-      next: (res) =>{
-        alert(`El mueble ${mueble.nombre_mueble} fue registrado`);
-        this.router.navigate(['/inventario']);
+    this._muebleService.saveMueble(formData).subscribe({
+      next: () =>{
+        this._alertaService.exito(`El mueble ${values.nombre_mueble} fue registrado`);
+        setTimeout(() => this.router.navigate(['/inventario']), 2000);
       },
       error: (err) => {
         //si el backend responde con un error 400 
         if(err.status === 400){
           //muestra el mensaje de que ya existe
-          alert(err.error.msg);
+          this._alertaService.advertencia(err.error.msg);
         } else {
-          alert('ups, algo salió mal en el servidor. Intenalo de nuevo');
+          this._alertaService.error('Algo salió mal en el servidor. Intena de nuevo');
         }
         console.error('Detalle del error:',err);
       }
