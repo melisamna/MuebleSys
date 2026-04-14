@@ -8,8 +8,6 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "dev": "nodemon --exec ts-node src/index.ts"
-
-
   },
   "prettier": {
     "printWidth": 100,
@@ -34,8 +32,11 @@
     "@angular/forms": "^21.1.0",
     "@angular/platform-browser": "^21.1.0",
     "@angular/router": "^21.1.0",
+    "chart.js": "^4.5.1",
+    "ng2-charts": "^10.0.0",
     "ngx-toastr": "^20.0.5",
     "rxjs": "~7.8.0",
+    "sweetalert2": "^11.26.24",
     "tslib": "^2.3.0"
   },
   "devDependencies": {

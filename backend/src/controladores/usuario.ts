@@ -49,8 +49,8 @@ try {
         foto: picture
     }, process.env.SECRET_KEY || 'MuebleSys123',{
         //Tiempo de expiración del token
-        expiresIn: '1h'
-        //expiresIn: '30m'
+        //expiresIn: '10s'
+        expiresIn: '30m'
     });
     // Devolvemos el token al frontend
     res.json({token: sessionToken, 

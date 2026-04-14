@@ -7,6 +7,7 @@ import rutasSucursales from "../rutas/sucursal.js";
 import db from "../db/conexion.js";
 import { configurarAsociasiones } from "./asociaciones.js";
 import rutasNotificaciones from "../rutas/notificacion.js";
+import path from 'path';
 
 
 export class Server{
@@ -44,6 +45,11 @@ export class Server{
             credentials: true
         }));
 
+        const pathGaleria = path.join(process.cwd(), 'galeria');
+        // hacer publica la carpeta de galeria
+        this.app.use('/public', express.static('galeria'));
+
+        console.log('ruta de galeria cargada en:', pathGaleria);
         this.app.use((req, res, next) => {
         res.setHeader("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
         res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");

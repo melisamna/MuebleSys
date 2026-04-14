@@ -15,10 +15,11 @@
             <span class="kpi-val">{{listMuebles.length}}</span>
         </div>
         <div class="search-row">
-            <input type="text" class="search-input" placeholder="🔍 Buscar producto..."  />
+            <input type="text" class="search-input" placeholder="🔍 Buscar producto..." (keyup)="filtrarMuebles($event)" />
         </div>
     </div>
-        <app-tabla-muebles [muebles]="listMuebles"  (eliminar)="eliminarMuebles($event)">
+    
+        <app-tabla-muebles [muebles]="mueblesFiltrados"  (eliminar)="eliminarMuebles($event)">
         </app-tabla-muebles>
 </div>
    

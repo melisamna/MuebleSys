@@ -3,7 +3,7 @@ import { Router, RouterModule } from '@angular/router';
 import { GoogleSigninButtonModule, SocialAuthService, SocialLoginModule} from '@abacritt/angularx-social-login';
 import { UsuarioService } from '../../servicios/usuario.service';
 import { CommonModule } from '@angular/common';
-import { ToastrService } from 'ngx-toastr';
+import { AlertaService } from '../../servicios/alerta.servicio';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +19,7 @@ export class LoginComponente implements OnInit {
       private authService: SocialAuthService,
       private _usuarioService: UsuarioService,
       private router: Router,
-      private toastr: ToastrService
+      private _alertaService: AlertaService
     ) {}
 
   ngOnInit() { 
@@ -54,12 +54,7 @@ export class LoginComponente implements OnInit {
             //si el backend mando error 401 se muestra el error
             const mensajeError = err.error?.msg || 'Error al validar el correo';
 
-            this.toastr.error(mensajeError, 'MuebleSys',{
-              //son 5 segundos para que alcance a leer que no esta autorizado
-              timeOut: 5000,
-              progressBar: true,
-              positionClass: 'toast-top-center'
-            });
+            this._alertaService.error(mensajeError);
             //limpia el estado de google para que no intente entrar automaticamente la proxima vez
             this.authService.signOut().catch(e => console.log('Ya estaba fuera'));
 

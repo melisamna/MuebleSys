@@ -54,3 +54,11 @@ backend/.env
 
 # Ignorar configuraciones del Frontend (Angular)
 frontend/src/environments/environment.prod.ts
+
+# Ignorar caché de Angular
+.angular/
+
+frontend/.angular/
+backend/node_modules/
+frontend/node_modules/
+backend/dist/
